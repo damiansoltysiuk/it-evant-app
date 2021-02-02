@@ -1,0 +1,195 @@
+ENDPOINT in event_app_it
+(Zapiski w nawiasach tyczą się wyjątków)
+
+CityService.java
+GET https://localhost:8443/api/cities - wyświetlenie wszystkich city
+GET https://localhost:8443/api/cities/name - wyświetlenie miasta po nazwie (object error)
+GET https://localhost:8443/api/cities/id - wyświetlenie miasta po id (empty page)
+
+POST https://localhost:8443/api/cities - zapisanie miasta w db
+{
+	"name":"Knyszyn"
+}
+
+PUT https://localhost:8443/api/cities/id - edycja miasta (id poza zakresu - tworzenie nowego miasta bez weryfikacji czy już istnieje, id najbliższe wolne)
+{
+	"name":"Korycin"
+}
+
+DELETE https://localhost:8443/api/cities/id - skasowanie miasta z db (object not found)
+
+
+Commentary.java
+GET https://localhost:8443/api/comments - wyświetlenie wszytskich komentarzy
+GET https://localhost:8443/api/comments/id - wyświetlenie komentarza o podanym id (object not found)
+GET https://localhost:8443/api/comments/event/eventID - wyświetlenie komentarza z danego eventy (object not found)
+
+POST https://localhost:8443/api/comments - dodanie komentarza (object not found)
+{
+	"userId":"3",
+	"eventId":"2",
+	"message":"Add comments used postman"
+}
+
+PUT https://localhost:8443/api/comments/id - edytowanie komentarza (tworzenie nowego komentarza/object not found - jesli user lub event nie istnieje)
+{
+	"userId":"3",
+	"eventId":"2",
+	"message":"Edited comments used postman"
+}
+
+DELETE https://localhost:8443/api/comments/id - kasowanie komentarza (object not found)
+
+
+
+EventMemberService.java
+GET https://localhost:8443/api/members - zwraca wszytskie zapisy na eventy
+GET https://localhost:8443/api/members/eventMemberId - zwraca wybraną zapis na event (object not found)
+
+POST https://localhost:8443/api/members - dodanie uzytkownika do zapisu
+{
+	"userId":"3",
+	"eventId":"1",
+	"roleUserEvent":"ORGANIZER"
+}
+
+POST https://localhost:8443/api/members/eventMemberId - edycja wybranego zapisu (object not found)
+{
+	"userId":"3",
+	"eventId":"1",
+	"roleUserEvent":"MEMBER"
+}
+
+DELETE https://localhost:8443/api/members/eventMemberId - skasowanie wybranego eventMemberId
+
+
+EventService.java
+GET https://localhost:8443/api/events - wyświetlenie wszystkich wydarzeń
+GET https://localhost:8443/api/events/id - wyświetlenie wydarzenia powiązanego z id
+
+POST https://localhost:8443/api/events - dodanie wydarzenia
+{
+	"eventName":"Programming with Bykowski",
+	"eventDescription":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas risus eu pharetra placerat. Aenean sed luctus tellus. Etiam nec ipsum finibus, aliquet lectus vel, accumsan metus. Duis ultricies leo non turpis feugiat venenatis.",
+	"eventDataTime":"2020-06-01 19:00",
+	"eventType":"Webinar",
+	"eventCoverLink":"https://i2.wp.com/bykowski.pl/wp-content/uploads/2019/12/trener.jpg?resize=1170%2C680&ssl=1",
+	"eventWebsite":"https://bykowski.pl",
+	"eventSubjects":"Java",
+	"locationName":"Your computer",
+	"address":"Your home",
+	"notes":"You need more coffea!",
+	"latitude":"00.00000",
+	"longitude":"00.00000",
+	"cityName":"Internet",
+	"userEmail":"user@ex.ex"
+}
+
+PUT https://localhost:8443/api/events/1 - edycja wydarzenia (object not found)
+{
+	"eventName":"Programming with Jalowka",
+	"eventDescription":"Lorem ipsum dolor siet kometa, consectetur adipiscing elit. Nunc egestas risus eu pharetra placerat. Aenean sed luctus tellus. Etiam nec ipsum finibus, aliquet lectus vel, accumsan metus. Duis ultricies leo non turpis feugiat venenatis.",
+	"eventDataTime":"2020-06-01 12:12",
+	"eventType":"Webinar",
+	"eventCoverLink":"https://i2.wp.com/bykowski.pl/wp-content/uploads/2019/12/trener.jpg?resize=1170%2C680&ssl=1",
+	"eventWebsite":"https://jalowka.pl",
+	"eventSubjects":"Java",
+	"locationName":"Your notebook or PC",
+	"address":"Your home",
+	"notes":"You need more milk!",
+	"latitude":"00.00000",
+	"longitude":"00.00000",
+	"cityName":"Net",
+	"userEmail":"moderator@ex.ex"
+}
+
+DELETE https://localhost:8443/api/events/1 - skasowanie wydarzenia o id podanym
+
+GET https://localhost:8443/api/events/param1 - (jak nie znajdzie po prostu zwraca podany parametr)
+param1 = id zwraca wydarzenie o zadanym id
+param1 = bialystok (city) zwraca ewenty z bialegostoku
+param1 = workshop (eventype) zwracaeventy spelniajace eventype
+param1 = angular (eventsubject) zwraca event spelniajace subject
+
+GET https://localhost:8443/api/events/query?phrase=ob wyszukiwanie po frazie w tytule i opisie (wielkosc liter nie istotna) - object not found
+GET https://localhost:8443/api/events/query?name=bite wyszukiwanie po frazie w tytule UWAGA: jeśli fraza jest pusta to szuka po frazie, jesli ma jakas wartosc to szuka tylko po frazie!
+
+GET https://localhost:8443/api/events/event-list zwraca tylko liste nazw wydarzeń
+
+GET https://localhost:8443/api/events/user/3 - zwraca liste wydarzen na ktorych jest zapisany (bez roznicy czy organizator czy member) - object not found
+
+GET https://localhost:8443/api/events/date?from=20200320-0800&to=20200531 - zwraca wydarzenia pomiedzy dwoma datami
+from yyyyMMdd-HHmm (jeśli nie podamy czasu - domyślnie ustawi na 00:00)
+to yyyyMMdd-HHmm (jeśli nie podammy czasu - domyślnie ustawi na 23.59)
+
+
+LocationService.java
+GET https://localhost:8443/api/locations - zwraca wyszystkie zapisane lokacje
+GET https://localhost:8443/api/locations/param1 -zwraca konkretna lokacje - objectnotfound
+param1 = id zwraca lokacje o okreslonym id
+param1 = warszawa zwraca liste lokacji w danym miescie
+
+POST https://localhost:8443/api/locations - zapisanie lokacji;
+{
+	"name":"Hotel Kopernik",
+	"city":"Torun",
+	"address":"Wola Zamkowa 16",
+	"notes":"Blue moon room",
+	"latitude":"53.011590",
+	"longitude":"18,614293"
+}
+
+PUT https://localhost:8443/api/locations/7 - edycja lokacji z zapisem (object not found)
+{
+	"name":"Hotel Copernicus",
+	"city":"Torun",
+	"address":"Wola Zamkowa 16",
+	"notes":"Blue planet",
+	"latitude":"53.011590",
+	"longitude":"18,614293"
+}
+
+
+DELETE https://localhost:8443/api/locations/2 - kasacja lokacji o id 2 (object not found)
+
+
+LoginService.java
+POST https://localhost:8443/login - logowanie w zakładce header musimy pobrać token uwierzytelniający
+{
+	"email":"admin@ex.ex",
+	"password":"admin"
+}
+
+Header:
+KEY: Authorization
+VALUE: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBleC5leCIsImV4cCI6MTU4NDgzMzA2MX0.rvxhUkkNLJoF5x3SUGOSctgP1-3sPvXWdTNj21dFyZORgYhFCbXJWu4-KdaUw95iZgFEOejK5euBJCm4lf9dJQ
+
+
+RegisterService.java
+POST https://localhost:8443/api/register //walidacja hasła, walidacja unikalnosci maila - wywali errorki
+{
+	"email":"mrbean@bbc.com",
+	"password":"pass1234",
+	"repeatedPassword":"pass1234",
+	"username":"Mr. Bean"
+}
+
+UserService.java
+GET https://localhost:8443/api/users - zwraca liste użytkowników
+POST https://localhost:8443/api/users - zapis użytkownika
+{
+	"email": "lalala@la.la",
+    "password": "lalala",
+    "username": "Lala la",
+    "role": "USER"
+}
+
+PUT https://localhost:8443/api/users/14 - edycja uzytkownika (object not found)
+{
+	"email": "lalala@la.la",
+    "password": "edited",
+    "username": "updated user",
+    "role": "USER"
+}
+
+DELETE https://localhost:8443/api/users/14 - kasacja (object not found)

@@ -1,0 +1,12 @@
+input,expected
+dada@dada.da,true
+hkjksadjdasjh@iewqou.sd,true
+jdkodjsasjdasadsl@weq.pl,true
+mail@ex.ex,true
+mommy.daddy@fcompany.com,true
+sis-bro@se.es,true
+!blabla@bla.pl,false
+#dask21@wp.pl,false
+*jiofjds*7@gmail.com,false
+.doahdsasj@john.com,false
+oMg@wp.wp.wp.wp,true
